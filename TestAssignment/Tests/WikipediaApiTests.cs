@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using NUnit.Framework;
 using TestAssignment.Resources;
 using TestAssignment.Resources.Pages;
 
@@ -16,10 +15,11 @@ public class WikipediaApiTests : BaseClass
         var dataFromApi = WikipediaApiHolder.GetDataFromApi();
         var dataFromUi = TestDrivenDevelopmentPage.Instance
             .Navigate()
-            .ProcessAndPrintText(); 
-        
+            .GetDataFromPage();
+
         var notFoundInApi = dataFromApi
-            .Where(item => !dataFromUi.Keys.Any(key => string.Equals(key, item.Key, StringComparison.OrdinalIgnoreCase)))
+            .Where(item =>
+                !dataFromUi.Keys.Any(key => string.Equals(key, item.Key, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.That(notFoundInApi, Is.Empty,
