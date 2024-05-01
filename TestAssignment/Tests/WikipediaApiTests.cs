@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TestAssignment.Resources;
 using TestAssignment.Resources.Pages;
 

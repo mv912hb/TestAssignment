@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -13,7 +10,7 @@ public class TestDrivenDevelopmentPage
     private static readonly By TDD_HEADER = By.Id("Test-driven_development");
     private static readonly By TDD_TEXT = By.XPath("./ancestor::h3/following-sibling::p[1]");
 
-    private IWebDriver _driver;
+    private IWebDriver? _driver;
 
     private TestDrivenDevelopmentPage()
     {
@@ -21,7 +18,7 @@ public class TestDrivenDevelopmentPage
 
     public static TestDrivenDevelopmentPage Instance { get; } = new();
 
-    private void Initialize(IWebDriver driver)
+    private void Initialize(IWebDriver? driver)
     {
         _driver = driver;
     }
@@ -29,7 +26,7 @@ public class TestDrivenDevelopmentPage
     public TestDrivenDevelopmentPage Navigate()
     {
         Initialize(SeleniumHolder.Instance.Driver);
-        _driver.Navigate().GoToUrl(Url);
+        _driver!.Navigate().GoToUrl(Url);
         return this;
     }
 

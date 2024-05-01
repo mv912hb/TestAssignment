@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 
 namespace TestAssignment.Resources;
 
 public static class WikipediaApiHolder
 {
-    private static readonly HttpClient HttpClient = new();
     private const string ArticleName = "Test_automation";
+    private static readonly HttpClient HttpClient = new();
 
     private static int GetSectionNumber()
     {
@@ -37,7 +33,7 @@ public static class WikipediaApiHolder
             $"https://en.wikipedia.org/w/api.php?action=parse&page=Test_automation&prop=text&section={sectionNumber}&format=json";
         var response = HttpClient.GetStringAsync(url).Result;
         var jsonResponse = JObject.Parse(response);
-        var htmlText = jsonResponse["parse"]["text"]["*"].ToString();
+        var htmlText = jsonResponse["parse"]!["text"]!["*"]!.ToString();
 
         var textContent = Regex.Replace(htmlText, "<[^>]*>", "");
 

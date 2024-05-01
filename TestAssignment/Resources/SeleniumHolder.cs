@@ -5,42 +5,39 @@ namespace TestAssignment.Resources;
 
 public class SeleniumHolder
 {
-    private static SeleniumHolder _instance;
-    private static readonly object Padlock = new();
-    private IWebDriver _driver;
+    private IWebDriver? _driver;
 
     private SeleniumHolder()
     {
     }
 
-    public IWebDriver Driver
+    public static SeleniumHolder Instance { get; } = new();
+
+    public IWebDriver? Driver
     {
         get
         {
-            if (_driver is null) OpenDriver();
+            if (_driver is null) OpenBrowser();
             return _driver;
         }
     }
 
-    public static SeleniumHolder Instance
+    public void OpenBrowser()
     {
-        get
-        {
-            lock (Padlock)
-            {
-                return _instance ??= new SeleniumHolder();
-            }
-        }
+        if (_driver is not null) return;
+        var options = new ChromeOptions();
+
+        options.AddArgument("--headless");
+        options.AddArgument("--disable-gpu");
+        options.AddArgument("--start-fullscreen");
+
+        _driver = new ChromeDriver(options);
     }
 
-    public void OpenDriver()
+    public void CloseBrowser()
     {
-        _driver ??= new ChromeDriver();
-    }
-
-    public void CloseDriver()
-    {
-        _driver?.Quit();
+        if (_driver is null) return;
+        _driver.Quit();
         _driver = null;
     }
 }

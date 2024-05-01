@@ -7,12 +7,12 @@ public class BaseClass
     [SetUp]
     public void SetUp()
     {
-        SeleniumHolder.Instance.OpenDriver();
+        SeleniumHolder.Instance.OpenBrowser();
     }
 
     [TearDown]
     public void TearDown()
     {
-        SeleniumHolder.Instance.CloseDriver();
+        SeleniumHolder.Instance.CloseBrowser();
     }
 }
