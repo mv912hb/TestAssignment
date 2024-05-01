@@ -6,11 +6,13 @@ namespace TestAssignment.Resources;
 public static class WikipediaApiHolder
 {
     private const string ArticleName = "Test_automation";
+    private const string SectionName = "Test-driven development";
+    private const string BaseUrl = "https://en.wikipedia.org/w/api.php?action=parse&page";
     private static readonly HttpClient HttpClient = new();
 
     private static int GetSectionNumber()
     {
-        var url = $"https://en.wikipedia.org/w/api.php?action=parse&page={ArticleName}&prop=sections&format=json";
+        var url = $"{BaseUrl}={ArticleName}&prop=sections&format=json";
         var response = HttpClient.GetStringAsync(url).Result;
         var jsonResponse = JObject.Parse(response);
         var sections = jsonResponse["parse"]!["sections"];
@@ -19,7 +21,7 @@ public static class WikipediaApiHolder
 
         foreach (var section in sections!)
         {
-            if (section["line"]!.ToString() != "Test-driven development") continue;
+            if (section["line"]!.ToString() is not SectionName) continue;
             sectionNumber = Convert.ToInt32(section["index"]!.ToString());
             break;
         }
@@ -30,7 +32,7 @@ public static class WikipediaApiHolder
     private static string GetSectionText(int sectionNumber)
     {
         var url =
-            $"https://en.wikipedia.org/w/api.php?action=parse&page=Test_automation&prop=text&section={sectionNumber}&format=json";
+            $"{BaseUrl}={ArticleName}&prop=text&section={sectionNumber}&format=json";
         var response = HttpClient.GetStringAsync(url).Result;
         var jsonResponse = JObject.Parse(response);
         var htmlText = jsonResponse["parse"]!["text"]!["*"]!.ToString();
@@ -45,19 +47,10 @@ public static class WikipediaApiHolder
         return textContent.Trim();
     }
 
-
-    private static Dictionary<string, int> ProcessTextAndCreateDictionary(string text)
-    {
-        var words = Regex.Replace(text.ToLower(), @"\[[^\]]*?\]|\d+|\W+", " ")
-            .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        return words.GroupBy(word => word).ToDictionary(group => group.Key, group => group.Count());
-    }
-
     public static Dictionary<string, int> GetDataFromApi()
     {
         var sectionNumber = GetSectionNumber();
         var textContent = GetSectionText(sectionNumber);
-        return ProcessTextAndCreateDictionary(textContent);
+        return CommonUtilities.ProcessText(textContent);
     }
 }

@@ -11,7 +11,7 @@ public class WikipediaApiTests : BaseClass
     public void CompareDataTest()
     {
         var dataFromApi = WikipediaApiHolder.GetDataFromApi();
-        var dataFromUi = TestDrivenDevelopmentPage.Instance
+        var dataFromUi = TestAutomationPage.Instance
             .Navigate()
             .GetDataFromPage();
 

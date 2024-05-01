@@ -7,10 +7,6 @@ public class SeleniumHolder
 {
     private IWebDriver? _driver;
 
-    private SeleniumHolder()
-    {
-    }
-
     public static SeleniumHolder Instance { get; } = new();
 
     public IWebDriver? Driver
@@ -26,11 +22,7 @@ public class SeleniumHolder
     {
         if (_driver is not null) return;
         var options = new ChromeOptions();
-
-        options.AddArgument("--headless");
-        options.AddArgument("--disable-gpu");
         options.AddArgument("--start-fullscreen");
-
         _driver = new ChromeDriver(options);
     }
 
